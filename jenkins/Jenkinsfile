@@ -1,26 +1,50 @@
 pipeline {
-     agent any
-     environment {
+    def app
+    
+    agent any
+    
+    environment {
         CI = 'true' 
+        registry = "adorszasz/udacity-nd9991-capstone"
+        registryCredential = "dockerhub"
     }
-     stages {
-         stage('Build') {
-             steps {
-                 sh 'npm install'
-             }
-         }
-         stage('Lint JS') {
-              steps {
-                  sh 'npm install eslint --save-dev'
-                  sh './node_modules/.bin/eslint ./src/App.js'
-                  sh './node_modules/.bin/eslint ./src/App.test.js'
-                  sh './node_modules/.bin/eslint ./src/index.js'
-              }
-         }
-         stage('Test') {
-             steps {
-                sh './jenkins/scripts/test.sh' 
+    stages {
+        stage('Build') {
+            steps {
+                nodejs(nodeJSInstallationName: 'node', configId: 'node') {
+                    sh 'npm install'
+                }
             }
-         }
-     }
+        }
+        stage('Lint JS') {
+            steps {
+                nodejs(nodeJSInstallationName: 'node', configId: 'node') {
+                    sh 'npm install eslint --save-dev'
+                    sh './node_modules/.bin/eslint ./src/App.js'
+                    sh './node_modules/.bin/eslint ./src/App.test.js'
+                    sh './node_modules/.bin/eslint ./src/index.js'
+                }
+            }
+        }
+        stage('Test App') {
+            steps {
+                nodejs(nodeJSInstallationName: 'node', configId: 'node') {
+                    sh './jenkins/scripts/test.sh' 
+                }
+            }
+        }
+        stage('Build docker image') {
+            app = docker.build registry + ":$BUILD_NUMBER"
+        }
+        stage('Push image to registry') {
+            docker.withRegistry('', registryCredential) {
+                app.push()
+            }
+        }
+        stage('Cleanup local docker image') {
+            steps{
+                sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+        }
+    }
 }
