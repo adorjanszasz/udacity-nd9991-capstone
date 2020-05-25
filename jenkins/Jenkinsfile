@@ -1,6 +1,4 @@
-pipeline {
-    def app
-    
+pipeline {    
     agent any
     
     environment {
@@ -33,12 +31,15 @@ pipeline {
                 }
             }
         }
-        stage('Build docker image') {
-            app = docker.build registry + ":$BUILD_NUMBER"
-        }
-        stage('Push image to registry') {
-            docker.withRegistry('', registryCredential) {
-                app.push()
+        script {
+            def app
+            stage('Build docker image') {
+                app = docker.build registry + ":$BUILD_NUMBER"
+            }
+            stage('Push image to registry') {
+                docker.withRegistry('', registryCredential) {
+                    app.push()
+                }
             }
         }
         stage('Cleanup local docker image') {
