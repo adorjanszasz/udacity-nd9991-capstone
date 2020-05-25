@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        script {
+        node {
             def app
             stage('Build docker image') {
                 app = docker.build registry + ":$BUILD_NUMBER"
