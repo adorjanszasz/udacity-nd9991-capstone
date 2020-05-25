@@ -32,11 +32,15 @@ pipeline {
             }
         }
         stage('Build docker image') {
-            docker.build '${registry}:${BUILD_NUMBER}'
+            steps { 
+                docker.build '${registry}:${BUILD_NUMBER}'
+            }
         }
         stage('Push image to registry') {
-            docker.withRegistry('', $registryCredential) {
-                docker.build('$registry:${BUILD_NUMBER}').push()
+            steps {
+                docker.withRegistry('', $registryCredential) {
+                    docker.build('$registry:${BUILD_NUMBER}').push()
+                }
             }
         }
         stage('Cleanup local docker image') {
