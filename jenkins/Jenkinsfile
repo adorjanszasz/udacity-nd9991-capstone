@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Lint JS') {
             steps {
-                nodejs(nodeJSInstallationName: 'node', configId: 'node') {
+                nodejs(nodeJSInstallationName: 'node', configId: 'MyNpmrcConfig') {
                     sh 'npm install eslint --save-dev'
                     sh './node_modules/.bin/eslint ./src/App.js'
                     sh './node_modules/.bin/eslint ./src/App.test.js'
