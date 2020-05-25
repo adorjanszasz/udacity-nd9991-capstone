@@ -12,8 +12,7 @@ COPY . package*.json /app/
 
 ## Step 3:
 # Install packages and build
-RUN npm install &&\
-    npm run-script build
+RUN npm install
 
 ## Step 4:
 # Expose port 3000
