@@ -1,0 +1,26 @@
+pipeline {
+     agent any
+     environment {
+        CI = 'true' 
+    }
+     stages {
+         stage('Build') {
+             steps {
+                 sh 'npm install'
+             }
+         }
+         stage('Lint JS') {
+              steps {
+                  sh 'npm install eslint --save-dev'
+                  sh './node_modules/.bin/eslint ./src/App.js'
+                  sh './node_modules/.bin/eslint ./src/App.test.js'
+                  sh './node_modules/.bin/eslint ./src/index.js'
+              }
+         }
+         stage('Test') {
+             steps {
+                sh './jenkins/scripts/test.sh' 
+            }
+         }
+     }
+}
