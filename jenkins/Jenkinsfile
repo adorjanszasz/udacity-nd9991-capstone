@@ -7,6 +7,12 @@ pipeline {
         registryCredential = "dockerhub"
     }
     stages {
+        stage('Generate') {
+            node {
+                checkout scm
+                stash 'source'
+            }
+        }
         stage('Build') {
             steps {
                 nodejs(nodeJSInstallationName: 'node', configId: 'node') {
