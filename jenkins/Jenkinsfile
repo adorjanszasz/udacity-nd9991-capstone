@@ -4,7 +4,6 @@ pipeline {
     environment {
         CI = 'true' 
         registry = "adorszasz/udacity-nd9991-capstone"
-        registryCredential = "dockerhub"
     }
     stages {
         stage('Build') {
@@ -35,7 +34,7 @@ pipeline {
         stage('Push image to registry') {
             steps {
                 script {
-                    docker.withRegistry('', $registryCredential) {
+                    docker.withRegistry('', 'dockerhub') {
                         docker.build('$registry:${BUILD_NUMBER}').push()
                     }
                 }
