@@ -9,7 +9,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                checkout scm
                 nodejs(nodeJSInstallationName: 'node', configId: 'node') {
                     sh 'npm install'
                 }
