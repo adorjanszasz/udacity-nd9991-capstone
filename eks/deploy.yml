@@ -21,6 +21,11 @@
         namespace: default
       register: app_svc
 
+    - name: Set the load balancer URL as a fact.
+      set_fact:
+        app_lb_host: "{{ app_svc['resources'][0]['status']['loadBalancer']['ingress'][0]['hostname'] }}"
+      when: aws_environment | bool
+
     - name: Wait for Load Balancer to respond.
       uri:
         url: "http://{{ app_lb_host }}"
@@ -41,7 +46,7 @@
     - name: Add an A record in Route53 (if configured).
       route53:
         profile: "{{ aws_profile }}"
-        zone: "{{ app_route53_zone }}"
+        zone: "{{ udacity_route53_zone }}"
         record: "{{ app_route53_domain }}"
         state: present
         type: A
@@ -52,5 +57,5 @@
         wait: true
       when:
         - aws_environment | bool
-        - app_route53_zone != ''
+        - udacity_route53_zone != ''
         - app_route53_domain != ''

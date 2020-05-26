@@ -19,3 +19,7 @@ eks_nodegroup_cluster_size: 2
 # Kubernetes settings.
 k8s_kubeconfig: ~/.kube/eks-example
 k8s_no_log: true
+
+# Domain settings for Route53 DNS.
+udacity_route53_zone: "adorjanszasz.com"
+app_route53_domain: "app.adorjanszasz.com"

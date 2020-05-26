@@ -1,21 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: udacity-capstone
+  name: udacity-capstone-final
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      nd: web
+      app: react-app
+      tier: frontend
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        nd: web
+        app: react-app
+        tier: frontend
     spec:
       containers:
-        - name: nd-site
+        - name: react-app
           image: adorszasz/udacity-nd9991-capstone:26
+          ports:
+            - containerPort: 3000
+              name: wordpress
 ---
 apiVersion: v1
 kind: Service
@@ -25,7 +32,9 @@ metadata:
 spec:
   type: NodePort
   selector:
-    nd: web
+    app: react-app
+    tier: frontend
+  type: LoadBalancer
   ports:
     - port: 3000
       targetPort: 8080
