@@ -28,6 +28,8 @@ spec:
       containers:
       - name: react-app
         image: adorszasz/udacity-nd9991-capstone:26
+        imagePullSecrets:
+          - name: regcred
         resources:
           limits:
             memory: 200Mi
