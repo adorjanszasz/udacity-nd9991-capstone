@@ -6,11 +6,6 @@
     - vars/main.yml
 
   tasks:
-    - name: Ensure botocore and boto3 modules are installed
-      pip:
-        name: ["boto3", "botocore"]
-        extra_args: "--user"
-
     - name: Ensure VPC exists via CloudFormation.
       cloudformation:
         stack_name: capstone-eks-vpc
