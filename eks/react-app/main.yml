@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacity-capstone
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nd: web
+  template:
+    metadata:
+      labels:
+        nd: web
+    spec:
+      containers:
+        - name: nd-site
+          image: adorszasz/udacity-nd9991-capstone:26
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nd-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    nd: web
+  ports:
+    - port: 3000
+      targetPort: 8080
+      nodePort: 30001

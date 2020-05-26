@@ -6,48 +6,14 @@ pipeline {
         registry = "adorszasz/udacity-nd9991-capstone"
     }
     stages {
-        stage('Build') {
+        stage('Prepare EKS-Stack') {
             steps {
-                sh 'npm install'
-            }
-        }
-        stage('Lint JS') {
-            steps {
-                sh 'npm install eslint --save-dev'
-                sh './node_modules/.bin/eslint ./src/App.js'
-                sh './node_modules/.bin/eslint ./src/App.test.js'
-                sh './node_modules/.bin/eslint ./src/index.js'
-            }
-        }
-        stage('Test App') {
-            steps {
-                sh 'npm test'
-            }
-        }
-        stage('Build docker image') {
-            steps { 
-                script {
-                    docker.build '${registry}:${BUILD_NUMBER}'
-                }
-            }
-        }
-        stage('Push image to registry') {
-            steps {
-                script {
-                    docker.withRegistry('', 'dockerhub') {
-                        docker.build('$registry:${BUILD_NUMBER}').push()
-                    }
-                }
-            }
-        }
-        stage('Cleanup local docker image') {
-            steps{
-                sh "docker rmi ${registry}:${BUILD_NUMBER}"
+                sh 'ansible-playbook -i eks/inventory eks/main.yml'
             }
         }
         stage('Deploy image into the cluster') {
             steps{
-                sh "ansible-playbook -i inventory deploy.yml"
+                sh "ansible-playbook -i eks/inventory eks/deploy.yml"
             }
         }
     }
