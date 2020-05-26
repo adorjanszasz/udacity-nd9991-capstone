@@ -11,6 +11,7 @@
         stack_name: capstone-eks-vpc
         state: present
         region: "{{ aws_region }}"
+        profile: "{{ aws_profile }}"
         disable_rollback: false
         template: cloudformation/vpc.yml
         template_parameters:
@@ -29,6 +30,7 @@
         stack_name: capstone-eks-cluster
         state: present
         region: "{{ aws_region }}"
+        profile: "{{ aws_profile }}"
         disable_rollback: false
         template: cloudformation/eks-cluster.yml
         template_parameters:
@@ -50,6 +52,7 @@
         stack_name: capstone-eks-nodegroup
         state: present
         region: "{{ aws_region }}"
+        profile: "{{ aws_profile }}"
         disable_rollback: false
         template: cloudformation/eks-nodegroup.yml
         template_parameters:
