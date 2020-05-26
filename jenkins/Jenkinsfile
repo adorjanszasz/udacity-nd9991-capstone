@@ -8,12 +8,19 @@ pipeline {
     stages {
         stage('Prepare EKS-Stack') {
             steps {
-                sh 'ansible-playbook -i eks/inventory eks/main.yml'
+                sh 'ansible-playbook -i eks/inventory eks/main.yml --flush-cache'
+            }
+        }
+        stage('Prepare kubectl environment') {
+            steps{
+                sh "kubectl create secret docker-registry regcred --docker-username=adorszasz --docker-password=DockAdor22 --docker-email=ador.szasz@gmail.com --docker-server=https://index.docker.io/v1/"
+                sh "kubectl apply -f eks/deploy.yml"
             }
         }
         stage('Deploy image into the cluster') {
             steps{
-                sh "ansible-playbook -i eks/inventory eks/deploy.yml"
+                
+                sh "ansible-playbook -i eks/inventory eks/deploy.yml --flush-cache"
             }
         }
     }
