@@ -8,7 +8,7 @@ aws_profile: default
 stack_outputs: {}
 
 # EKS Cluster settings.
-eks_cluster_name: udacity-capstone
+eks_cluster_name: udacity-capstone-final
 eks_kubernetes_version: "1.16"
 
 # Nodegroup settings.
