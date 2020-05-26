@@ -21,11 +21,11 @@
         kind: Service
         name: react-app
         namespace: default
-      register: reactapp_svc
+      register: app_svc
 
     - name: Set the load balancer URL as a fact.
       set_fact:
-        app_lb_host: "{{ reactapp_svc['resources'][0]['status']['loadBalancer']['ingress'][0]['hostname'] }}"
+        app_lb_host: "{{ app_svc['resources'][0]['status']['loadBalancer']['ingress'][0]['hostname'] }}"
       when: aws_environment | bool
 
     - name: Wait for Load Balancer to respond.
