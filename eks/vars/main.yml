@@ -2,7 +2,7 @@
 # AWS Settings.
 aws_environment: true
 aws_region: us-east-2
-aws_profile: default
+aws_profile: default2
 
 # This variable will be populated during playbook runs.
 stack_outputs: {}
