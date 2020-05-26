@@ -88,7 +88,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone:
         Fn::Sub: "${Region}a"
-      CidrBlock: 172.31.0.0/20
+      CidrBlock: 10.1.0.0/20
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -112,7 +112,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone:
         Fn::Sub: "${Region}b"
-      CidrBlock: 172.31.16.0/20
+      CidrBlock: 10.1.16.0/20
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -136,7 +136,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone:
         Fn::Sub: "${Region}c"
-      CidrBlock: 172.31.32.0/20
+      CidrBlock: 10.1.32.0/20
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
