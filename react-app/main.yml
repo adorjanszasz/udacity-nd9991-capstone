@@ -1,28 +1,56 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
-  name: udacity-capstone-final
-  namespace: default
+  name: react-app
+  namespace: kube-system
+  labels:
+    k8s-app: react-app
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: react-app
       tier: frontend
-  strategy:
-    type: Recreate
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: react-app
         tier: frontend
     spec:
+      tolerations:
+      # this toleration is to have the daemonset runnable on master nodes
+      # remove it if your masters can't run pods
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       containers:
-        - name: react-app
-          image: adorszasz/udacity-nd9991-capstone:26
-          ports:
-            - containerPort: 3000
-              name: wordpress
+      - name: react-app
+        image: adorszasz/udacity-nd9991-capstone:26
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        ports:
+          - containerPort: 3000
+            name: react-app
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
 ---
 apiVersion: v1
 kind: Service
