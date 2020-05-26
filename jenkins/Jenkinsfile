@@ -8,12 +8,12 @@ pipeline {
     stages {
         stage('Prepare EKS-Stack') {
             steps {
-                sh 'ansible-playbook -i eks/inventory eks/main.yml'
+                sh 'AWS_PROFILE=default ansible-playbook -i ../eks/inventory ../eks/main.yml'
             }
         }
         stage('Deploy image into the cluster') {
             steps{
-                sh "ansible-playbook -i eks/inventory eks/deploy.yml"
+                sh "AWS_PROFILE=default ansible-playbook -i ../eks/inventory ../eks/deploy.yml"
             }
         }
     }
